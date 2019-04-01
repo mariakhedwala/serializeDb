@@ -74,9 +74,9 @@ class DbSerializeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function show(User $user)
     {
-        return User::display($request);
+        return User::display($user);
     }
 
     /**

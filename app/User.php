@@ -41,18 +41,13 @@ class User extends Authenticatable
     {
         // return $validated;
         // return $validated->toJson();
-        return json_encode($validated);
+        return json_encode($validated, JSON_UNESCAPED_SLASHES);
     }
 
-    public static function display($request) 
+    public static function display($user)
     {
-        $user = \App\User::all();
-
-        // return $user->toArray();
-        $fn = $user->toArray();
-        return $fn;
-        $fnc = $fn[0];
-        $final = $fnc['first_name'];
-        return explode(",", $final);
+        $user_data = $user->first_name;
+        $someArray = json_decode($user_data, true);
+        print_r($someArray);
     }
 }

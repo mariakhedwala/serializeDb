@@ -17,4 +17,4 @@ Route::get('/', function () {
 
 Route::get('/feed', 'DbSerializeController@create');
 Route::post('/feed', 'DbSerializeController@store');
-Route::get('/users', 'DbSerializeController@show');
+Route::get('/users/{user}', 'DbSerializeController@show');
