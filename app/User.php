@@ -48,6 +48,17 @@ class User extends Authenticatable
     {
         $user_data = $user->first_name;
         $someArray = json_decode($user_data, true);
-        print_r($someArray);
+        return $someArray;
+    }
+
+    public static function displayAll($users)
+    {
+        $all_data = [];
+        foreach ($users as $user) {
+            $user_data = $user->first_name;
+            $someArray = json_decode($user_data, true);
+            array_push($all_data, $someArray);
+        }
+        return $all_data;
     }
 }

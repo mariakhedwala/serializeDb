@@ -16,7 +16,10 @@ class DbSerializeController extends Controller
      */
     public function index()
     {
-        //
+        $dump_users = User::all();
+        $users = $dump_users;
+        $all_users = User::displayAll($dump_users);
+        return view('serialize.index', compact('all_users','users'));
     }
 
     /**
@@ -85,9 +88,10 @@ class DbSerializeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        $edit_user = User::display($user);
+        return view('serialize.edit', compact('edit_user', 'user'));
     }
 
     /**
@@ -97,9 +101,35 @@ class DbSerializeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(User $user)
     {
-        //
+        try {
+            //validate form
+            $validated = request()->validate([
+                'first_name' => 'required',
+                'last_name' => 'required',
+                'email' => 'required',
+            ]);
+            
+            $data = User::detail($validated);
+            // return $data;
+            // User::create($validated);
+            // dd($user);
+            $user->first_name = $data;
+            $user->last_name = '';
+            $user->email = '';
+            $user->password = '';
+            // $user->first_name = $data;
+            $user->save();
+            // DB::insert('insert into users (first_name) values(?)',[$validated]);
+            return redirect('/feed');
+
+        } catch(\Illuminate\Database\QueryException $e){
+            $errorCode = $e->errorInfo[1];
+            if($errorCode == '1062'){
+                dd('Duplicate Entry');
+            }
+        }
     }
 
     /**
@@ -108,8 +138,9 @@ class DbSerializeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
+        return redirect('/users');
     }
 }
